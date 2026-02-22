@@ -24,9 +24,6 @@ export default function ArtworkTable({
   onRowToggle,
   onSelectAll,
 }: ArtworkTableProps) {
-  const allSelected =
-    artworks.length > 0 && artworks.every((row) => selectedIds.has(row.id));
-
   const selectedRows = artworks.filter((row) => selectedIds.has(row.id));
 
   return (
@@ -57,16 +54,12 @@ export default function ArtworkTable({
           }
         }
       }}
-      onHeaderCheckboxToggle={(e) => {
-        onSelectAll(artworks, e.checked);
-      }}
       dataKey="id"
       tableStyle={{ minWidth: '60rem' }}
     >
       <Column
         selectionMode="multiple"
         headerStyle={{ width: '3rem' }}
-        headerCheckboxIcon={allSelected ? 'pi pi-check' : undefined}
       />
       <Column field="title" header="Title" style={ellipsisStyle} />
       <Column
