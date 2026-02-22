@@ -1,31 +1,22 @@
 import { Paginator, type PaginatorPageChangeEvent } from 'primereact/paginator';
 
-interface ArtworkPaginatorProps {
+interface Props {
   currentPage: number;
   totalRecords: number;
   rowsPerPage: number;
   onPageChange: (page: number) => void;
 }
 
-export default function ArtworkPaginator({
-  currentPage,
-  totalRecords,
-  rowsPerPage,
-  onPageChange,
-}: ArtworkPaginatorProps) {
+export default function ArtworkPaginator({ currentPage, totalRecords, rowsPerPage, onPageChange }: Props) {
   const first = currentPage * rowsPerPage;
-
-  const handlePageChange = (e: PaginatorPageChangeEvent) => {
-    const newPage = e.page + 1; // convert 0-indexed to 1-indexed
-    onPageChange(newPage);
-  };
 
   return (
     <Paginator
       first={first}
       rows={rowsPerPage}
       totalRecords={totalRecords}
-      onPageChange={handlePageChange}
+      pageLinkSize={7}
+      onPageChange={(e: PaginatorPageChangeEvent) => onPageChange(e.page + 1)}
     />
   );
 }

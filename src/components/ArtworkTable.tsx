@@ -1,7 +1,7 @@
 import { DataTable } from 'primereact/datatable';
+import type { Artwork } from '../types/artwork';
 import { Column } from 'primereact/column';
 import type { ReactNode } from 'react';
-import type { Artwork } from '../types/artwork';
 
 interface ArtworkTableProps {
   artworks: Artwork[];
@@ -12,7 +12,7 @@ interface ArtworkTableProps {
   headerControl?: ReactNode;
 }
 
-const ellipsisStyle: React.CSSProperties = {
+const truncate: React.CSSProperties = {
   maxWidth: '200px',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
@@ -27,19 +27,18 @@ export default function ArtworkTable({
   onSelectAll,
   headerControl,
 }: ArtworkTableProps) {
-  const selectedRows = artworks.filter((row) => selectedIds.has(row.id));
+  const selected = artworks.filter((a) => selectedIds.has(a.id));
 
   return (
     <DataTable
       value={artworks}
       loading={loading}
       selectionMode="checkbox"
-      selection={selectedRows}
+      selection={selected}
       onSelectionChange={(e) => {
         const incoming = e.value as Artwork[];
         const incomingIds = new Set(incoming.map((r) => r.id));
 
-        // Header checkbox: select all or deselect all
         if (incoming.length === artworks.length && !artworks.every((r) => selectedIds.has(r.id))) {
           onSelectAll(artworks, true);
           return;
@@ -49,13 +48,11 @@ export default function ArtworkTable({
           return;
         }
 
-        // Single row toggle — find the changed row
-        for (const row of artworks) {
-          const wasSelected = selectedIds.has(row.id);
-          const isNowSelected = incomingIds.has(row.id);
-          if (wasSelected !== isNowSelected) {
+        for (let i = 0; i < artworks.length; i++) {
+          const row = artworks[i];
+          if (selectedIds.has(row.id) !== incomingIds.has(row.id)) {
             onRowToggle(row.id);
-            return;
+            break;
           }
         }
       }}
@@ -64,30 +61,19 @@ export default function ArtworkTable({
     >
       <Column
         selectionMode="multiple"
-        headerStyle={{ width: '5.5rem' }}
         headerClassName="selection-column-header"
+        bodyClassName="selection-column-body"
+        style={{ width: '50px' }}
         header={
           headerControl ? (
             <div className="selection-header-content">{headerControl}</div>
           ) : undefined
         }
       />
-      <Column field="title" header="Title" style={ellipsisStyle} />
-      <Column
-        field="place_of_origin"
-        header="Place of Origin"
-        style={ellipsisStyle}
-      />
-      <Column
-        field="artist_display"
-        header="Artist Display"
-        style={ellipsisStyle}
-      />
-      <Column
-        field="inscriptions"
-        header="Inscriptions"
-        style={ellipsisStyle}
-      />
+      <Column field="title" header="Title" style={truncate} />
+      <Column field="place_of_origin" header="Place of Origin" style={truncate} />
+      <Column field="artist_display" header="Artist Display" style={truncate} />
+      <Column field="inscriptions" header="Inscriptions" style={truncate} />
       <Column field="date_start" header="Date Start" />
       <Column field="date_end" header="Date End" />
     </DataTable>

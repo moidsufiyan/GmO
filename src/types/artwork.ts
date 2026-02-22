@@ -16,6 +16,7 @@ export interface Pagination {
   current_page: number;
 }
 
+// could probably just inline this but keeping it here for now
 export interface ApiResponse {
   data: Artwork[];
   pagination: Pagination;

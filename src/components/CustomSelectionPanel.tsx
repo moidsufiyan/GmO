@@ -1,25 +1,23 @@
 import { useRef, useState } from 'react';
-import { OverlayPanel } from 'primereact/overlaypanel';
 import { Button } from 'primereact/button';
+import { OverlayPanel } from 'primereact/overlaypanel';
 import { InputNumber } from 'primereact/inputnumber';
 
-interface CustomSelectionPanelProps {
+interface Props {
   onSubmit: (n: number) => void;
 }
 
-export default function CustomSelectionPanel({
-  onSubmit,
-}: CustomSelectionPanelProps) {
+export default function CustomSelectionPanel({ onSubmit }: Props) {
   const op = useRef<OverlayPanel>(null);
-  const [value, setValue] = useState<number | null>(null);
+  const [val, setVal] = useState<number | null>(null);
 
-  const handleSubmit = () => {
-    if (value && value > 0) {
-      onSubmit(value);
-      setValue(null);
+  function handleSubmit() {
+    if (val && val > 0) {
+      onSubmit(val);
+      setVal(null);
       op.current?.hide();
     }
-  };
+  }
 
   return (
     <>
@@ -35,8 +33,8 @@ export default function CustomSelectionPanel({
           <label htmlFor="select-count">Rows to select</label>
           <InputNumber
             id="select-count"
-            value={value}
-            onValueChange={(e) => setValue(e.value ?? null)}
+            value={val}
+            onValueChange={(e) => setVal(e.value ?? null)}
             min={1}
             placeholder="Enter number"
           />

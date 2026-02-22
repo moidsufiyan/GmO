@@ -1,54 +1,38 @@
-import { useEffect, useState, useCallback } from 'react';
-import type { Artwork } from './types/artwork';
+import { useState, useEffect, useCallback } from 'react';
 import { fetchArtworks } from './services/artworkService';
 import { useRowSelection } from './hooks/useRowSelection';
+import type { Artwork } from './types/artwork';
 import ArtworkTable from './components/ArtworkTable';
-import ArtworkPaginator from './components/ArtworkPaginator';
 import CustomSelectionPanel from './components/CustomSelectionPanel';
+import ArtworkPaginator from './components/ArtworkPaginator';
 import './App.css';
 
-const ROWS_PER_PAGE = 12;
+const PAGE_SIZE = 12;
 
 function App() {
   const [artworks, setArtworks] = useState<Artwork[]>([]);
   const [loading, setLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalRecords, setTotalRecords] = useState(0);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
 
-  const {
-    selectedIds,
-    toggleRow,
-    togglePageRows,
-    selectNRows,
-    applyPendingSelections,
-  } = useRowSelection();
+  const { selectedIds, toggleRow, togglePageRows, selectNRows, applyPendingSelections } =
+    useRowSelection();
 
-  const loadPage = useCallback(async (page: number) => {
+  const loadPage = useCallback(async (p: number) => {
     setLoading(true);
     try {
-      const response = await fetchArtworks(page);
-      setArtworks(response.data);
-      setTotalRecords(response.pagination.total);
-      // Auto-select rows if there are pending selections from a previous selectNRows call
-      applyPendingSelections(response.data);
+      const res = await fetchArtworks(p);
+      setArtworks(res.data);
+      setTotal(res.pagination.total);
+      applyPendingSelections(res.data);
     } catch (err) {
-      console.error('Failed to fetch artworks:', err);
+      console.error('fetch failed', err);
     } finally {
       setLoading(false);
     }
   }, [applyPendingSelections]);
 
-  useEffect(() => {
-    loadPage(currentPage);
-  }, [currentPage, loadPage]);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
-
-  const handleSelectN = (n: number) => {
-    selectNRows(n, artworks);
-  };
+  useEffect(() => { loadPage(page); }, [page, loadPage]);
 
   return (
     <div className="app-container">
@@ -61,15 +45,18 @@ function App() {
           selectedIds={selectedIds}
           onRowToggle={toggleRow}
           onSelectAll={togglePageRows}
-          headerControl={<CustomSelectionPanel onSubmit={handleSelectN} />}
+          headerControl={
+            <CustomSelectionPanel onSubmit={(n) => selectNRows(n, artworks)} />
+          }
         />
       </div>
 
+      {/* TODO: maybe add a "clear selection" button somewhere here */}
       <ArtworkPaginator
-        currentPage={currentPage - 1}
-        totalRecords={totalRecords}
-        rowsPerPage={ROWS_PER_PAGE}
-        onPageChange={handlePageChange}
+        currentPage={page - 1}
+        totalRecords={total}
+        rowsPerPage={PAGE_SIZE}
+        onPageChange={setPage}
       />
     </div>
   );

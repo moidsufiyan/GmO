@@ -1,4 +1,3 @@
-/* ── Layout ── */
 .app-container {
   max-width: 1200px;
   margin: 2rem auto;
@@ -13,17 +12,15 @@
   color: #1e293b;
 }
 
-/* ── Card wrapper around the table ── */
 .table-wrapper {
   position: relative;
-  background: #ffffff;
+  background: #fff;
   border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 12px rgba(0,0,0,.06);
   padding: 1rem;
   overflow: hidden;
 }
 
-/* ── Selection column header controls (checkbox + chevron) ── */
 .table-wrapper .selection-column-header .p-column-header-content {
   display: flex;
   align-items: center;
@@ -32,9 +29,21 @@
   white-space: nowrap;
   padding: 0;
 }
-
+.table-wrapper .selection-column-header .p-column-header-content .p-checkbox {
+  order: 2;
+}
+.table-wrapper .selection-column-header .p-column-header-content .p-column-title {
+  order: 1;
+}
 .table-wrapper .selection-column-header .p-column-title:empty {
   display: none;
+}
+
+.table-wrapper .selection-column-body {
+  text-align: center;
+}
+.table-wrapper .selection-column-body .p-checkbox {
+  display: inline-flex;
 }
 
 .table-wrapper .selection-header-content {
@@ -42,21 +51,18 @@
   align-items: center;
   gap: 0;
 }
-
 .table-wrapper .selection-header-content .p-button.p-button-text {
   color: #64748b;
   width: 1.5rem;
   height: 1.5rem;
-  margin-left: 0.1rem;
+  margin-left: 0;
   padding: 0;
 }
-
 .table-wrapper .selection-header-content .p-button.p-button-text:hover {
   color: #3b82f6;
   background: transparent;
 }
 
-/* ── Darker table header ── */
 .table-wrapper .p-datatable .p-datatable-thead > tr > th {
   background: #e2e8f0;
   color: #334155;
@@ -64,35 +70,33 @@
   border-bottom: 2px solid #cbd5e1;
 }
 
-/* subtle row hover */
+.table-wrapper .p-datatable .p-datatable-tbody > tr > td {
+  padding: 0.85rem 1rem;
+}
+
 .table-wrapper .p-datatable .p-datatable-tbody > tr:hover {
   background: #f8fafc;
 }
 
-/* ── Overlay panel polish ── */
 .p-overlaypanel .p-overlaypanel-content {
   padding: 1rem;
 }
-
 .p-overlaypanel .p-overlaypanel-content label {
   font-size: 0.875rem;
   font-weight: 600;
   color: #475569;
 }
-
 .p-overlaypanel .p-overlaypanel-content .p-inputnumber {
   width: 100%;
 }
-
 .p-overlaypanel .p-overlaypanel-content .p-button {
   margin-top: 0.5rem;
   width: 100%;
 }
 
-/* ── Paginator spacing ── */
 .app-container > .p-paginator {
   margin-top: 1rem;
   border-radius: 8px;
-  background: #ffffff;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0,0,0,.05);
 }
