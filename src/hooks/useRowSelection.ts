@@ -1,8 +1,12 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import type { Artwork } from '../types/artwork';
 
 export function useRowSelection() {
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
+
+  // Tracks how many more rows still need to be auto-selected on future pages.
+  // Using a ref so it doesn't cause extra renders but persists across navigations.
+  const pendingCountRef = useRef<number>(0);
 
   const isSelected = useCallback(
     (id: number): boolean => selectedIds.has(id),
@@ -38,38 +42,48 @@ export function useRowSelection() {
     []
   );
 
+  /**
+   * Select n rows starting from the current page.
+   * - If n <= currentPageRows.length → select the first n rows on this page.
+   * - If n > currentPageRows.length  → select ALL rows on this page and store
+   *   the remainder in pendingCountRef so future pages auto-select rows.
+   * NO API calls. NO pre-fetching.
+   */
   const selectNRows = useCallback(
-    (
-      n: number,
-      currentPageRows: Artwork[],
-      currentPage: number,
-      _totalRows: number
-    ): void => {
-      void _totalRows;
+    (n: number, currentPageRows: Artwork[]): void => {
+      const toSelect = Math.min(n, currentPageRows.length);
+      const remaining = Math.max(0, n - currentPageRows.length);
+
+      pendingCountRef.current = remaining;
+
       setSelectedIds((prev) => {
         const next = new Set(prev);
-        const rowsPerPage = currentPageRows.length;
-
-        if (n <= rowsPerPage) {
-          for (let i = 0; i < n; i++) {
-            next.add(currentPageRows[i].id);
-          }
-        } else {
-          // Select all rows on the current page
-          for (const row of currentPageRows) {
-            next.add(row.id);
-          }
-
-          // Add placeholder IDs for rows on future pages
-          const remaining = n - rowsPerPage;
-          for (let i = 0; i < remaining; i++) {
-            const page = currentPage + 1 + Math.floor(i / rowsPerPage);
-            const rowIndex = i % rowsPerPage;
-            const placeholderId = page * rowsPerPage + rowIndex;
-            next.add(placeholderId);
-          }
+        for (let i = 0; i < toSelect; i++) {
+          next.add(currentPageRows[i].id);
         }
+        return next;
+      });
+    },
+    []
+  );
 
+  /**
+   * Called after new page data loads.
+   * If there are pending selections, auto-select rows on this page and
+   * decrement the counter. No API calls involved.
+   */
+  const applyPendingSelections = useCallback(
+    (pageRows: Artwork[]): void => {
+      if (pendingCountRef.current <= 0) return;
+
+      const toSelect = Math.min(pendingCountRef.current, pageRows.length);
+      pendingCountRef.current -= toSelect;
+
+      setSelectedIds((prev) => {
+        const next = new Set(prev);
+        for (let i = 0; i < toSelect; i++) {
+          next.add(pageRows[i].id);
+        }
         return next;
       });
     },
@@ -77,6 +91,7 @@ export function useRowSelection() {
   );
 
   const clearAll = useCallback((): void => {
+    pendingCountRef.current = 0;
     setSelectedIds(new Set());
   }, []);
 
@@ -93,6 +108,7 @@ export function useRowSelection() {
     toggleRow,
     togglePageRows,
     selectNRows,
+    applyPendingSelections,
     clearAll,
     getSelectionForPage,
   };

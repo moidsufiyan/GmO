@@ -20,6 +20,7 @@ function App() {
     toggleRow,
     togglePageRows,
     selectNRows,
+    applyPendingSelections,
   } = useRowSelection();
 
   const loadPage = useCallback(async (page: number) => {
@@ -28,12 +29,14 @@ function App() {
       const response = await fetchArtworks(page);
       setArtworks(response.data);
       setTotalRecords(response.pagination.total);
+      // Auto-select rows if there are pending selections from a previous selectNRows call
+      applyPendingSelections(response.data);
     } catch (err) {
       console.error('Failed to fetch artworks:', err);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [applyPendingSelections]);
 
   useEffect(() => {
     loadPage(currentPage);
@@ -44,7 +47,7 @@ function App() {
   };
 
   const handleSelectN = (n: number) => {
-    selectNRows(n, artworks, currentPage, totalRecords);
+    selectNRows(n, artworks);
   };
 
   return (

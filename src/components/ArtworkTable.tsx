@@ -37,23 +37,25 @@ export default function ArtworkTable({
       selection={selectedRows}
       onSelectionChange={(e) => {
         const incoming = e.value as Artwork[];
-        // Determine if a single row was toggled or the header checkbox was used
-        if (incoming.length === artworks.length) {
-          // Header "select all" was checked
+        const incomingIds = new Set(incoming.map((r) => r.id));
+
+        // Header checkbox: select all or deselect all
+        if (incoming.length === artworks.length && !artworks.every((r) => selectedIds.has(r.id))) {
           onSelectAll(artworks, true);
-        } else if (incoming.length === 0) {
-          // Header "deselect all" was clicked
+          return;
+        }
+        if (incoming.length === 0 && artworks.some((r) => selectedIds.has(r.id))) {
           onSelectAll(artworks, false);
-        } else {
-          // Single row toggle — find the diff
-          const incomingIds = new Set(incoming.map((r) => r.id));
-          for (const row of artworks) {
-            const wasSelected = selectedIds.has(row.id);
-            const isNowSelected = incomingIds.has(row.id);
-            if (wasSelected !== isNowSelected) {
-              onRowToggle(row.id);
-              return;
-            }
+          return;
+        }
+
+        // Single row toggle — find the changed row
+        for (const row of artworks) {
+          const wasSelected = selectedIds.has(row.id);
+          const isNowSelected = incomingIds.has(row.id);
+          if (wasSelected !== isNowSelected) {
+            onRowToggle(row.id);
+            return;
           }
         }
       }}
