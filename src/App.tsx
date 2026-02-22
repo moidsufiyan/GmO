@@ -38,6 +38,10 @@ function App() {
     <div className="app-container">
       <h1 className="app-title">Artwork Data Table</h1>
 
+      <div className="selection-banner">
+        Selected: <span className="selection-count">{selectedIds.size}</span> row{selectedIds.size !== 1 ? 's' : ''}
+      </div>
+
       <div className="table-wrapper">
         <ArtworkTable
           artworks={artworks}
@@ -51,7 +55,6 @@ function App() {
         />
       </div>
 
-      {/* TODO: maybe add a "clear selection" button somewhere here */}
       <ArtworkPaginator
         currentPage={page - 1}
         totalRecords={total}

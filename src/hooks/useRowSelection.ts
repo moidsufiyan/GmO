@@ -56,7 +56,6 @@ export function useRowSelection() {
     []
   );
 
-  // TODO: maybe show a toast when pending selections finish
   const applyPendingSelections = useCallback(
     (pageRows: Artwork[]): void => {
       if (pendingCountRef.current <= 0) return;

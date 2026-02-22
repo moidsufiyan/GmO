@@ -12,6 +12,17 @@
   color: #1e293b;
 }
 
+.selection-banner {
+  font-size: 0.9rem;
+  color: #475569;
+  padding: 0.5rem 0.25rem;
+  margin-bottom: 0.5rem;
+}
+.selection-count {
+  font-weight: 700;
+  color: #3b82f6;
+}
+
 .table-wrapper {
   position: relative;
   background: #fff;
@@ -94,9 +105,68 @@
   width: 100%;
 }
 
-.app-container > .p-paginator {
+.paginator-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-top: 1rem;
+  padding: 0.6rem 1rem;
   border-radius: 8px;
   background: #fff;
-  box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+}
+.paginator-info {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+.paginator-info b {
+  color: #1e293b;
+}
+
+.paginator-bar .p-paginator {
+  padding: 0;
+  background: transparent;
+  border: none;
+  gap: 0.5rem;
+}
+
+.paginator-bar .p-paginator .p-paginator-first,
+.paginator-bar .p-paginator .p-paginator-last {
+  display: none;
+}
+
+.paginator-bar .p-paginator .p-paginator-prev,
+.paginator-bar .p-paginator .p-paginator-next {
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #fff;
+  color: #334155;
+  font-size: 0.8rem;
+  padding: 0.35rem 0.75rem;
+  min-width: auto;
+  height: auto;
+}
+.paginator-bar .p-paginator .p-paginator-prev:hover,
+.paginator-bar .p-paginator .p-paginator-next:hover {
+  background: #f1f5f9;
+}
+
+.paginator-bar .p-paginator .p-paginator-pages {
+  display: flex;
+  gap: 0.4rem;
+}
+.paginator-bar .p-paginator .p-paginator-pages .p-paginator-page {
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #fff;
+  color: #334155;
+  font-size: 0.8rem;
+  min-width: 2rem;
+  height: 2rem;
+  margin: 0;
+}
+.paginator-bar .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: #fff;
 }
