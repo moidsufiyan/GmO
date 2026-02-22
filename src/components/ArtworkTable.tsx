@@ -1,5 +1,6 @@
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import type { ReactNode } from 'react';
 import type { Artwork } from '../types/artwork';
 
 interface ArtworkTableProps {
@@ -8,6 +9,7 @@ interface ArtworkTableProps {
   selectedIds: Set<number>;
   onRowToggle: (id: number) => void;
   onSelectAll: (rows: Artwork[], checked: boolean) => void;
+  headerControl?: ReactNode;
 }
 
 const ellipsisStyle: React.CSSProperties = {
@@ -23,6 +25,7 @@ export default function ArtworkTable({
   selectedIds,
   onRowToggle,
   onSelectAll,
+  headerControl,
 }: ArtworkTableProps) {
   const selectedRows = artworks.filter((row) => selectedIds.has(row.id));
 
@@ -59,7 +62,13 @@ export default function ArtworkTable({
     >
       <Column
         selectionMode="multiple"
-        headerStyle={{ width: '3rem' }}
+        headerStyle={{ width: '5.5rem' }}
+        headerClassName="selection-column-header"
+        header={
+          headerControl ? (
+            <div className="selection-header-content">{headerControl}</div>
+          ) : undefined
+        }
       />
       <Column field="title" header="Title" style={ellipsisStyle} />
       <Column

@@ -1,30 +1,98 @@
+/* ── Layout ── */
 .app-container {
   max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem 1rem;
+  margin: 2rem auto;
+  padding: 0 1rem;
 }
 
 .app-title {
   text-align: center;
   margin-bottom: 1.5rem;
+  font-size: 1.75rem;
+  font-weight: 700;
   color: #1e293b;
 }
 
+/* ── Card wrapper around the table ── */
 .table-wrapper {
   position: relative;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.06);
+  padding: 1rem;
+  overflow: hidden;
 }
 
-/* Position the chevron button directly over the checkbox column header */
-.selection-panel-anchor {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 10;
-  /* Align with the header row height and checkbox column width */
+/* ── Selection column header controls (checkbox + chevron) ── */
+.table-wrapper .selection-column-header .p-column-header-content {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 3rem;
-  height: 3rem;
-  pointer-events: auto;
+  gap: 0.25rem;
+  white-space: nowrap;
+  padding: 0;
+}
+
+.table-wrapper .selection-column-header .p-column-title:empty {
+  display: none;
+}
+
+.table-wrapper .selection-header-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+}
+
+.table-wrapper .selection-header-content .p-button.p-button-text {
+  color: #64748b;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-left: 0.1rem;
+  padding: 0;
+}
+
+.table-wrapper .selection-header-content .p-button.p-button-text:hover {
+  color: #3b82f6;
+  background: transparent;
+}
+
+/* ── Darker table header ── */
+.table-wrapper .p-datatable .p-datatable-thead > tr > th {
+  background: #e2e8f0;
+  color: #334155;
+  font-weight: 600;
+  border-bottom: 2px solid #cbd5e1;
+}
+
+/* subtle row hover */
+.table-wrapper .p-datatable .p-datatable-tbody > tr:hover {
+  background: #f8fafc;
+}
+
+/* ── Overlay panel polish ── */
+.p-overlaypanel .p-overlaypanel-content {
+  padding: 1rem;
+}
+
+.p-overlaypanel .p-overlaypanel-content label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.p-overlaypanel .p-overlaypanel-content .p-inputnumber {
+  width: 100%;
+}
+
+.p-overlaypanel .p-overlaypanel-content .p-button {
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+/* ── Paginator spacing ── */
+.app-container > .p-paginator {
+  margin-top: 1rem;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }

@@ -52,16 +52,13 @@ function App() {
       <h1 className="app-title">Artwork Data Table</h1>
 
       <div className="table-wrapper">
-        <div className="selection-panel-anchor">
-          <CustomSelectionPanel onSubmit={handleSelectN} />
-        </div>
-
         <ArtworkTable
           artworks={artworks}
           loading={loading}
           selectedIds={selectedIds}
           onRowToggle={toggleRow}
           onSelectAll={togglePageRows}
+          headerControl={<CustomSelectionPanel onSubmit={handleSelectN} />}
         />
       </div>
 
