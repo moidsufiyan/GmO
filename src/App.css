@@ -1,1 +1,30 @@
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
 
+.app-title {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #1e293b;
+}
+
+.table-wrapper {
+  position: relative;
+}
+
+/* Position the chevron button directly over the checkbox column header */
+.selection-panel-anchor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  /* Align with the header row height and checkbox column width */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  pointer-events: auto;
+}
